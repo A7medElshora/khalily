@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794498799697,
+      "tag": "0000_smart_fitting_room_core",
+      "breakpoints": true
+    }
+  ]
 }
