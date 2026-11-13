@@ -341,6 +341,22 @@ export type Database = {
     }
     Functions: {
       is_store_owner: { Args: { _store_id: string }; Returns: boolean }
+      list_public_products: {
+        Args: never
+        Returns: {
+          catalog_path: string
+          category: string
+          collection: string
+          colors: string[]
+          description: string
+          discount_price: number
+          id: string
+          name: string
+          price: number
+          sizes: string[]
+          stock_qty: number
+        }[]
+      }
       owns_store_path: { Args: { _path: string }; Returns: boolean }
     }
     Enums: {

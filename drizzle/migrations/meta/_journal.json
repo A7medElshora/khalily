@@ -8,6 +8,20 @@
       "when": 1794498799697,
       "tag": "0000_smart_fitting_room_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794528862855,
+      "tag": "0001_add_public_store_catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794528939798,
+      "tag": "0002_limit_public_catalog_reads",
+      "breakpoints": true
     }
   ]
 }
