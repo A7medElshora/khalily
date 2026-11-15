@@ -14,8 +14,13 @@ function drawTriangle(
   source: [Point, Point, Point],
   destination: [Point, Point, Point],
 ) {
-  const [a, b, c] = source;
-  const [u, v, w] = destination;
+  const a = source[0];
+  const b = source[1];
+  const c = source[2];
+  const u = destination[0];
+  const v = destination[1];
+  const w = destination[2];
+  if (!a || !b || !c || !u || !v || !w) return;
   const denominator = a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y);
   if (Math.abs(denominator) < 0.001) return;
 
@@ -56,7 +61,11 @@ function drawArmOcclusion(
   shoulderWidth: number,
 ) {
   const arms = [[11, 13, 15], [12, 14, 16]];
-  for (const [shoulderIndex, elbowIndex, wristIndex] of arms) {
+  for (const arm of arms) {
+    const shoulderIndex = arm[0];
+    const elbowIndex = arm[1];
+    const wristIndex = arm[2];
+    if (shoulderIndex === undefined || elbowIndex === undefined || wristIndex === undefined) continue;
     const shoulder = pointAt(points, shoulderIndex, width, height);
     const elbow = pointAt(points, elbowIndex, width, height);
     const wrist = pointAt(points, wristIndex, width, height);

@@ -107,7 +107,7 @@ export const startAiTryOn = createServerFn({ method: "POST" })
         },
       }),
     });
-    const predictionId = typeof result.id === "string" ? result.id : "";
+    const predictionId = typeof result["id"] === "string" ? result["id"] : "";
     if (!predictionId) throw new Error("FASHN did not return a prediction identifier.");
 
     const { data: job, error: jobError } = await context.supabase.from("ai_tryon_jobs").insert({
@@ -115,7 +115,7 @@ export const startAiTryOn = createServerFn({ method: "POST" })
       product_id: product.id,
       created_by: context.userId,
       prediction_id: predictionId,
-      status: typeof result.status === "string" ? result.status : "starting",
+      status: typeof result["status"] === "string" ? result["status"] : "starting",
     }).select("id").single();
     if (jobError) throw new Error("The try-on was submitted but its status could not be saved.");
     return { jobId: job.id, predictionId };
@@ -134,18 +134,18 @@ export const pollAiTryOn = createServerFn({ method: "POST" })
     if (job.status === "completed") return { status: "completed", output: null };
 
     const result = await fashnRequest(`/status/${encodeURIComponent(job.prediction_id)}`);
-    const status = typeof result.status === "string" ? result.status : "processing";
-    const urls = outputUrls(result.output);
+    const status = typeof result["status"] === "string" ? result["status"] : "processing";
+    const urls = outputUrls(result["output"]);
     const finished = status === "completed" || status === "failed";
     await context.supabase.from("ai_tryon_jobs").update({
       status,
-      error_message: typeof result.error === "string" ? result.error.slice(0, 500) : null,
+      error_message: typeof result["error"] === "string" ? result["error"].slice(0, 500) : null,
       ...(finished ? { completed_at: new Date().toISOString() } : {}),
     }).eq("id", job.id);
     return {
       status,
       output: status === "completed" ? urls[0] ?? null : null,
-      error: status === "failed" ? (typeof result.error === "string" ? result.error : "The provider could not complete this try-on.") : null,
+      error: status === "failed" ? (typeof result["error"] === "string" ? result["error"] : "The provider could not complete this try-on.") : null,
     };
   });
 
@@ -157,16 +157,16 @@ export const removeProductBackground = createServerFn({ method: "POST" })
       method: "POST",
       body: JSON.stringify({ model_name: "background-remove", inputs: { image: data.image } }),
     });
-    const predictionId = typeof prediction.id === "string" ? prediction.id : "";
+    const predictionId = typeof prediction["id"] === "string" ? prediction["id"] : "";
     if (!predictionId) throw new Error("The image service did not return a processing identifier.");
 
     const deadline = Date.now() + 75_000;
     while (Date.now() < deadline) {
       await new Promise((resolve) => setTimeout(resolve, 2_500));
       const status = await fashnRequest(`/status/${encodeURIComponent(predictionId)}`);
-      if (status.status === "failed") throw new Error("The image service could not remove this background.");
-      if (status.status !== "completed") continue;
-      const outputUrl = outputUrls(status.output)[0];
+      if (status["status"] === "failed") throw new Error("The image service could not remove this background.");
+      if (status["status"] !== "completed") continue;
+      const outputUrl = outputUrls(status["output"])[0];
       if (!outputUrl) throw new Error("The image service returned no processed image.");
       const outputResponse = await fetch(outputUrl);
       if (!outputResponse.ok) throw new Error("The processed image could not be downloaded.");

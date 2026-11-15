@@ -30,6 +30,6 @@ use the editor.
 <!-- LOVABLE:END -->
 
 ## Project architecture rules
-- Keep product media in private Cloud Storage buckets with owner-scoped access and short-lived signed URLs, preserving originals and customer privacy.
+- Keep original product media private with owner-scoped access; expose only signed preview URLs and never overwrite originals.
 - Keep FASHN requests and provider credentials inside server functions so keys never enter browser code.
 - Keep pose inference and garment rendering in a browser-only, React-independent pipeline so camera tracking remains responsive across layouts.
