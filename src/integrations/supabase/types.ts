@@ -351,6 +351,7 @@ export type Database = {
           description: string
           discount_price: number
           id: string
+          live_overlay_path: string
           name: string
           price: number
           sizes: string[]
